@@ -7,7 +7,9 @@
 -- COMMAND ----------
 
 -- Create catalog
-CREATE CATALOG IF NOT EXISTS onsite_workshop;
+CREATE CATALOG IF NOT EXISTS onsite_workshop
+MANAGED LOCATION '<S3_BUCKET>'  -- TO DO: Change this to your S3 location
+;
 USE CATALOG onsite_workshop;
 
 -- COMMAND ----------
@@ -21,8 +23,3 @@ COMMENT 'Shared data for morning session';
 -- Create volume for data files
 CREATE VOLUME IF NOT EXISTS shared_data.data
 COMMENT 'Volume for workshop data files';
-
--- COMMAND ----------
-
--- Verify creation
-SHOW SCHEMAS IN onsite_workshop;
