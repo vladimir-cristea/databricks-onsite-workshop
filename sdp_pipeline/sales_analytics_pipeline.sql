@@ -130,19 +130,22 @@ CREATE OR REFRESH MATERIALIZED VIEW gold_partner_revenue_summary
 COMMENT "Monthly partner revenue and profit"
 AS SELECT 
   DATE_TRUNC('MONTH', transaction_date) as month,
+  DATE_FORMAT(transaction_date, 'MMMM') as month_name,
   partner_id,
   partner_name,
   region,
   tier,
-  0 as total_revenue,  -- TODO: Use SUM(revenue)
-  0 as total_profit,   -- TODO: Use SUM(profit)
+  0 as total_revenue,  -- TODO: Calculate total revenue for the partner-month
+  0 as total_profit,   -- TODO: Calculate total profit for the partner-month
   COUNT(transaction_id) as num_transactions,
   SUM(quantity) as total_units_sold,
   AVG(revenue) as avg_transaction_value,
-  MAX(revenue) as largest_deal
+  MAX(revenue) as largest_deal,
+  0.0 as profit_margin_pct  -- TODO: Calculate profit as percentage of revenue (handle division by zero)
 FROM silver_transactions
 GROUP BY 
   DATE_TRUNC('MONTH', transaction_date),
+  DATE_FORMAT(transaction_date, 'MMMM'),
   partner_id,
   partner_name,
   region,
@@ -152,19 +155,21 @@ CREATE OR REFRESH MATERIALIZED VIEW gold_product_performance
 COMMENT "Monthly product performance metrics"
 AS SELECT 
   DATE_TRUNC('MONTH', transaction_date) as month,
+  DATE_FORMAT(transaction_date, 'MMMM') as month_name,
   category,
   product_id,
   product_name,
-  0 as total_revenue,      -- TODO: Use SUM(revenue)
-  0 as unique_customers,   -- TODO: Use COUNT(DISTINCT partner_id)
+  0 as total_revenue,      -- TODO: Calculate total revenue for this product-month
+  0 as total_profit,       -- TODO: Calculate total profit for this product-month
+  0 as unique_customers,   -- TODO: Count how many different partners bought this product
   SUM(quantity) as total_units_sold,
   COUNT(transaction_id) as num_transactions,
   AVG(discount_pct) as avg_discount_pct,
-  SUM(profit) as total_profit,
-  ROUND(SUM(profit) / NULLIF(SUM(revenue), 0) * 100, 2) as profit_margin_pct
+  0.0 as profit_margin_pct  -- TODO: Calculate profit margin percentage (watch for zero revenue)
 FROM silver_transactions
 GROUP BY 
   DATE_TRUNC('MONTH', transaction_date),
+  DATE_FORMAT(transaction_date, 'MMMM'),
   category,
   product_id,
   product_name;
