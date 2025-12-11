@@ -1,11 +1,5 @@
 -- Sales Analytics Pipeline - 8-Node Medallion Architecture
--- Setup: Configure pipeline with parameter 'username' and target schema 'onsite_workshop.{username}'
-
--- Create username widget
-CREATE WIDGET TEXT username DEFAULT 'your_username';
-
--- Create personal schema for this participant
-CREATE SCHEMA IF NOT EXISTS IDENTIFIER('onsite_workshop.' || :username);
+-- Setup: Configure pipeline target as 'onsite_workshop.{username}' in DLT UI
 
 -- Bronze Layer: Raw Ingestion
 
@@ -20,7 +14,7 @@ AS SELECT
   account_manager,
   current_timestamp() as ingestion_timestamp
 FROM STREAM read_files(
-  '/Volumes/onsite_workshop/shared_data/data/partners.json',
+  '/Volumes/onsite_workshop/shared_data/data/partners/',
   format => 'json',
   schemaHints => 'partner_id INT, join_date DATE'
 );
@@ -38,7 +32,7 @@ AS SELECT
   currency,
   current_timestamp() as ingestion_timestamp
 FROM STREAM read_files(
-  '/Volumes/onsite_workshop/shared_data/data/transactions.json',
+  '/Volumes/onsite_workshop/shared_data/data/transactions/',
   format => 'json',
   schemaHints => 'transaction_id INT, partner_id INT, quantity INT, transaction_date DATE, unit_price DECIMAL(10,2), discount_pct DECIMAL(5,2)'
 );
@@ -54,7 +48,7 @@ AS SELECT
   launch_date,
   current_timestamp() as ingestion_timestamp
 FROM STREAM read_files(
-  '/Volumes/onsite_workshop/shared_data/data/products.json',
+  '/Volumes/onsite_workshop/shared_data/data/products/',
   format => 'json',
   schemaHints => 'list_price DECIMAL(10,2), cost DECIMAL(10,2), launch_date DATE'
 );

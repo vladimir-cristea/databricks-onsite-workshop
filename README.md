@@ -24,11 +24,17 @@ Go to **Settings → Identity and Access → Groups**, create group `onsite_work
 Go to **Repos** → **Add Repo** → Enter URL: `https://github.com/vladimir-cristea/databricks-onsite-workshop` → **Create Repo**
 
 ### 3. Copy Data Files to Volume
-After creating the volume, copy data files from your cloned repo to the volume:
+After creating the volume, copy data folders from your cloned repo to the volume:
 
 ```sql
-COPY FILES 'file:/Workspace/Repos/{your_username}/databricks-onsite-workshop/data/*.json' 
-TO '/Volumes/onsite_workshop/shared_data/data/';
+COPY FILES 'file:/Workspace/Repos/{your_username}/databricks-onsite-workshop/data/partners/' 
+TO '/Volumes/onsite_workshop/shared_data/data/partners/';
+
+COPY FILES 'file:/Workspace/Repos/{your_username}/databricks-onsite-workshop/data/transactions/' 
+TO '/Volumes/onsite_workshop/shared_data/data/transactions/';
+
+COPY FILES 'file:/Workspace/Repos/{your_username}/databricks-onsite-workshop/data/products/' 
+TO '/Volumes/onsite_workshop/shared_data/data/products/';
 ```
 
 Replace `{your_username}` with your actual username.
@@ -60,21 +66,19 @@ Expected: partners (21), products (6), transactions (50), summaries (~20-25 rows
 **Morning**: Participants query the shared tables in `onsite_workshop.shared_data`
 
 **Afternoon**: Participants create DLT pipeline from `sales_analytics_pipeline.sql`:
-1. Create new DLT pipeline
-2. Add `sales_analytics_pipeline.sql` as notebook source
-3. Configure pipeline:
-   - Parameter: `username` = their_username
-   - Target: `onsite_workshop.${username}`
-4. Complete TODO sections in Gold layer
+1. Go to **Workflows** → **Delta Live Tables** → **Create Pipeline**
+2. Add `sales_analytics_pipeline.sql` as file source
+3. Set target catalog: `onsite_workshop`, schema: `{your_username}`
+4. Complete TODO sections in Gold layer (edit the SQL file)
 5. Run pipeline
 
-Creates 8 nodes: 3 Bronze streaming tables, 3 Silver streaming tables, 2 Gold materialized views in their personal schema
+Pipeline creates 8 nodes: 3 Bronze streaming tables, 3 Silver streaming tables, 2 Gold materialized views
 
 ## Troubleshooting
 
 **"Permission denied"**: Verify group name is exactly `onsite_workshop_participants` and participants are members
 
-**"Path not found"**: Verify data files are uploaded to volume `/Volumes/onsite_workshop/shared_data/data/`
+**"Path not found"**: Verify data folders are copied to volume with structure `/Volumes/onsite_workshop/shared_data/data/{partners|transactions|products}/`
 
 ## Cleanup
 

@@ -21,7 +21,7 @@ USE SCHEMA shared_data;
 CREATE OR REPLACE TABLE partners AS
 SELECT *
 FROM read_files(
-  '/Volumes/onsite_workshop/shared_data/data/partners.json',
+  '/Volumes/onsite_workshop/shared_data/data/partners/',
   format => 'json',
   schemaHints => 'partner_id INT, join_date DATE'
 );
@@ -40,7 +40,7 @@ SELECT COUNT(*) as partner_count FROM partners;  -- Expected: 21
 CREATE OR REPLACE TABLE products AS
 SELECT *
 FROM read_files(
-  '/Volumes/onsite_workshop/shared_data/data/products.json',
+  '/Volumes/onsite_workshop/shared_data/data/products/',
   format => 'json',
   schemaHints => 'list_price DECIMAL(10,2), cost DECIMAL(10,2), launch_date DATE'
 );
@@ -59,7 +59,7 @@ SELECT COUNT(*) as product_count FROM products;  -- Expected: 6
 CREATE OR REPLACE TABLE transactions AS
 SELECT *
 FROM read_files(
-  '/Volumes/onsite_workshop/shared_data/data/transactions.json',
+  '/Volumes/onsite_workshop/shared_data/data/transactions/',
   format => 'json',
   schemaHints => 'transaction_id INT, partner_id INT, quantity INT, transaction_date DATE, unit_price DECIMAL(10,2), discount_pct DECIMAL(5,2)'
 );
