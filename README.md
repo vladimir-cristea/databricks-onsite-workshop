@@ -23,21 +23,11 @@ Go to **Settings → Identity and Access → Groups**, create group `onsite_work
 ### 2. Clone Repository
 Go to **Repos** → **Add Repo** → Enter URL: `https://github.com/vladimir-cristea/databricks-onsite-workshop` → **Create Repo**
 
-### 3. Copy Data Files to Volume
-After creating the volume, copy data folders from your cloned repo to the volume:
-
-```sql
-COPY FILES 'file:/Workspace/Repos/{your_username}/databricks-onsite-workshop/data/partners/' 
-TO '/Volumes/onsite_workshop/shared_data/data/partners/';
-
-COPY FILES 'file:/Workspace/Repos/{your_username}/databricks-onsite-workshop/data/transactions/' 
-TO '/Volumes/onsite_workshop/shared_data/data/transactions/';
-
-COPY FILES 'file:/Workspace/Repos/{your_username}/databricks-onsite-workshop/data/products/' 
-TO '/Volumes/onsite_workshop/shared_data/data/products/';
-```
-
-Replace `{your_username}` with your actual username.
+### 3. Upload Data to Volume
+After creating the volume:
+1. Navigate to **Catalog** → `onsite_workshop` → `shared_data` → `data` volume
+2. Upload the entire `data/` folder from your cloned repo (partners/, transactions/, products/ folders)
+3. Verify the structure is: `/Volumes/onsite_workshop/shared_data/data/data/{partners|transactions|products}/`
 
 ### 4. Run Setup Scripts
 Open SQL Editor and run in order:
@@ -78,7 +68,7 @@ Pipeline creates 8 nodes: 3 Bronze streaming tables, 3 Silver streaming tables, 
 
 **"Permission denied"**: Verify group name is exactly `onsite_workshop_participants` and participants are members
 
-**"Path not found"**: Verify data folders are copied to volume with structure `/Volumes/onsite_workshop/shared_data/data/{partners|transactions|products}/`
+**"Path not found"**: Verify data folder is copied to volume with structure `/Volumes/onsite_workshop/shared_data/data/data/{partners|transactions|products}/`
 
 ## Cleanup
 

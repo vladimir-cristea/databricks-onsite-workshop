@@ -48,7 +48,7 @@ AS SELECT
   launch_date,
   current_timestamp() as ingestion_timestamp
 FROM STREAM read_files(
-  '/Volumes/onsite_workshop/shared_data/data/data/products/',
+  '/Volumes/onsite_workshop/shared_data/data/products/',
   format => 'json',
   schemaHints => 'list_price DECIMAL(10,2), cost DECIMAL(10,2), launch_date DATE'
 );

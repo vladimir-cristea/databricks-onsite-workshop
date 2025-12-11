@@ -4,7 +4,7 @@
 -- MAGIC
 -- MAGIC Loads sample data into tables from the volume.
 -- MAGIC
--- MAGIC **Prerequisite:** Run COPY FILES command to populate volume with JSON files.
+-- MAGIC **Prerequisite:** Upload `data/` folder to volume `/Volumes/onsite_workshop/shared_data/data/` (manually via UI).
 
 -- COMMAND ----------
 
@@ -21,7 +21,7 @@ USE SCHEMA shared_data;
 CREATE OR REPLACE TABLE partners AS
 SELECT *
 FROM read_files(
-  '/Volumes/onsite_workshop/shared_data/data/partners/',
+  '/Volumes/onsite_workshop/shared_data/data/data/partners/',
   format => 'json',
   schemaHints => 'partner_id INT, join_date DATE'
 );
@@ -40,7 +40,7 @@ SELECT COUNT(*) as partner_count FROM partners;  -- Expected: 51
 CREATE OR REPLACE TABLE products AS
 SELECT *
 FROM read_files(
-  '/Volumes/onsite_workshop/shared_data/data/products/',
+  '/Volumes/onsite_workshop/shared_data/data/data/products/',
   format => 'json',
   schemaHints => 'list_price DECIMAL(10,2), cost DECIMAL(10,2), launch_date DATE'
 );
@@ -59,7 +59,7 @@ SELECT COUNT(*) as product_count FROM products;  -- Expected: 6
 CREATE OR REPLACE TABLE transactions AS
 SELECT *
 FROM read_files(
-  '/Volumes/onsite_workshop/shared_data/data/transactions/',
+  '/Volumes/onsite_workshop/shared_data/data/data/transactions/',
   format => 'json',
   schemaHints => 'transaction_id INT, partner_id INT, quantity INT, transaction_date DATE, unit_price DECIMAL(10,2), discount_pct DECIMAL(5,2)'
 );
