@@ -31,10 +31,10 @@ Create a new Databricks workspace if needed.
 2. Grant **Can use** permission to `onsite_workshop_participants` group
 
 ### 4. Import Repository
-Import this repository to your home folder:
 1. Navigate to `/Workspace/Users/{your_email}/`
-2. Import from GitHub: `https://github.com/vladimir-cristea/databricks-onsite-workshop`
-3. Name it: `databricks-onsite-workshop`
+2. Click **Create** → **Git Folder**
+3. Paste URL: `https://github.com/vladimir-cristea/databricks-onsite-workshop`
+4. Name: `databricks-onsite-workshop`
 
 ### 5. Run Setup Script 01
 Open and run `01_create_catalog_and_schema.sql` - creates catalog, schema, and volume.
