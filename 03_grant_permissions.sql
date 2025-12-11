@@ -20,6 +20,11 @@ GRANT SELECT ON SCHEMA onsite_workshop.shared_data TO `onsite_workshop_participa
 
 -- COMMAND ----------
 
+-- Volume permissions (needed for SDP pipeline to read data files)
+GRANT READ VOLUME ON VOLUME onsite_workshop.shared_data.data TO `onsite_workshop_participants`;
+
+-- COMMAND ----------
+
 -- Table permissions
 GRANT SELECT ON TABLE onsite_workshop.shared_data.partners TO `onsite_workshop_participants`;
 GRANT SELECT ON TABLE onsite_workshop.shared_data.products TO `onsite_workshop_participants`;

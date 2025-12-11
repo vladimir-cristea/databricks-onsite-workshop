@@ -14,33 +14,46 @@ Workshop setup for SQL analytics and Spark Declarative Pipelines (SDP) exercises
 **Participant Materials (Shared):**
 - `sdp_pipeline/sales_analytics_pipeline.sql` - Afternoon hands-on exercise (8-node medallion pipeline)
 
-## Prerequisites
-
-- Databricks workspace with Serverless SQL and Serverless Pipelines enabled
-- Admin access to create catalogs and grant permissions
-
-## Setup (10 minutes)
+## Setup
 
 ### 1. Create User Group
 Go to **Settings → Identity and Access → Groups**, create group `onsite_workshop_participants`, add all participant emails.
 
-### 2. Clone Repository
-Go to **Repos** → **Add Repo** → Enter URL: `https://github.com/vladimir-cristea/databricks-onsite-workshop` → **Create Repo**
+### 2. Create Workspace
+Create a new Databricks workspace if needed.
 
-### 3. Upload Data to Volume
-After creating the volume:
+### 3. Configure SQL Warehouse
+1. Edit the default **Serverless Starter Warehouse**:
+   - Size: **Small**
+   - Auto stop: **60 minutes** of inactivity
+   - Scaling: Min **1**, Max **4** clusters
+   - Type: **Serverless** (if available), otherwise **Pro**
+2. Grant **Can use** permission to `onsite_workshop_participants` group
+
+### 4. Import Repository
+Import this repository to your home folder:
+1. Navigate to `/Workspace/Users/{your_email}/`
+2. Import from GitHub: `https://github.com/vladimir-cristea/databricks-onsite-workshop`
+3. Name it: `databricks-onsite-workshop`
+
+### 5. Run Setup Script 01
+Open and run `01_create_catalog_and_schema.sql` - creates catalog, schema, and volume.
+
+### 6. Upload Data to Volume
 1. Navigate to **Catalog** → `onsite_workshop` → `shared_data` → `data` volume
-2. Upload the entire `data/` folder from your cloned repo (partners/, transactions/, products/ folders)
-3. Verify the structure is: `/Volumes/onsite_workshop/shared_data/data/data/{partners|transactions|products}/`
+2. Upload the entire `data/` folder from your imported repo
+3. Verify structure: `/Volumes/onsite_workshop/shared_data/data/data/{partners|transactions|products}/`
 
-### 4. Run Admin Setup Scripts
-Clone repo to YOUR private Repos space, then run in order:
-1. `01_create_catalog_and_schema.sql`
-2. `02_load_data.sql`
-3. `03_grant_permissions.sql`
-4. `04_share_pipeline.sql` - Copies pipeline to `/Workspace/Shared/workshop/`
+### 7. Run Setup Script 02
+Open and run `02_load_data.sql` - loads data from volume into tables.
 
-### 5. Verify
+### 8. Run Setup Script 03
+Open and run `03_grant_permissions.sql` - grants access to participants.
+
+### 9. Run Setup Script 04
+Open and run `04_share_pipeline.sql` - copies `sdp_pipeline/` folder to `/Workspace/Shared/workshop/`.
+
+### 10. Verify
 
 ```sql
 USE CATALOG onsite_workshop;
