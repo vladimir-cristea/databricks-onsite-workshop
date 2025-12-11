@@ -8,8 +8,6 @@
 
 -- MAGIC %md
 -- MAGIC ## Copy Pipeline to Shared Workspace
--- MAGIC
--- MAGIC This will make the pipeline accessible to all participants without giving them access to your setup notebooks.
 
 -- COMMAND ----------
 
@@ -18,41 +16,58 @@
 -- MAGIC username = spark.sql("SELECT current_user() as user").collect()[0]['user']
 -- MAGIC 
 -- MAGIC # Source: Your private Repos location
--- MAGIC source_path = f"/Workspace/Repos/{username}/databricks-onsite-workshop/sales_analytics_pipeline.sql"
+-- MAGIC source = f"file:/Workspace/Repos/{username}/databricks-onsite-workshop/sales_analytics_pipeline.sql"
 -- MAGIC 
 -- MAGIC # Destination: Shared workspace
--- MAGIC dest_path = "/Workspace/Shared/workshop/sales_analytics_pipeline.sql"
+-- MAGIC dest = "file:/Workspace/Shared/workshop/sales_analytics_pipeline.sql"
 -- MAGIC 
--- MAGIC # Create the directory if it doesn't exist
--- MAGIC dbutils.fs.mkdirs("file:/Workspace/Shared/workshop/")
+-- MAGIC # Create destination directory if it doesn't exist
+-- MAGIC try:
+-- MAGIC     dbutils.fs.mkdirs("file:/Workspace/Shared/workshop/")
+-- MAGIC except:
+-- MAGIC     pass  # Directory might already exist
 -- MAGIC 
 -- MAGIC # Copy the file
--- MAGIC dbutils.fs.cp(f"file:{source_path}", f"file:{dest_path}")
+-- MAGIC result = dbutils.fs.cp(source, dest, recurse=False)
 -- MAGIC 
--- MAGIC print(f"✅ Pipeline copied to: {dest_path}")
--- MAGIC print(f"Participants can now access it from /Workspace/Shared/workshop/")
+-- MAGIC if result:
+-- MAGIC     print(f"✅ Pipeline copied successfully!")
+-- MAGIC     print(f"Source: {source}")
+-- MAGIC     print(f"Destination: {dest}")
+-- MAGIC     print(f"\nParticipants can access it at: /Workspace/Shared/workshop/sales_analytics_pipeline.sql")
+-- MAGIC else:
+-- MAGIC     print("❌ Copy failed")
 
 -- COMMAND ----------
 
 -- MAGIC %md
--- MAGIC ## Verify
--- MAGIC
--- MAGIC Check that the file exists in Shared workspace:
+-- MAGIC ## Verify Copy
 
 -- COMMAND ----------
 
 -- MAGIC %python
--- MAGIC # List files in Shared/workshop
--- MAGIC display(dbutils.fs.ls("file:/Workspace/Shared/workshop/"))
+-- MAGIC # List files in Shared/workshop to verify
+-- MAGIC files = dbutils.fs.ls("file:/Workspace/Shared/workshop/")
+-- MAGIC display(files)
 
 -- COMMAND ----------
 
 -- MAGIC %md
--- MAGIC ## Next Steps
+-- MAGIC ## Set Permissions
+-- MAGIC
+-- MAGIC After copying, set permissions on the folder:
+-- MAGIC 1. Navigate to `/Workspace/Shared/workshop/` in the UI
+-- MAGIC 2. Right-click → **Permissions**
+-- MAGIC 3. Add `onsite_workshop_participants` group with **CAN READ** access
+
+-- COMMAND ----------
+
+-- MAGIC %md
+-- MAGIC ## Next Steps for Participants
 -- MAGIC
 -- MAGIC Participants should:
 -- MAGIC 1. Navigate to `/Workspace/Shared/workshop/sales_analytics_pipeline.sql`
 -- MAGIC 2. Copy it to their own workspace
--- MAGIC 3. Create a DLT pipeline pointing to their copy
--- MAGIC 4. Set target schema to `onsite_workshop.{their_username}`
-
+-- MAGIC 3. Edit to complete TODO sections
+-- MAGIC 4. Create DLT pipeline pointing to their copy
+-- MAGIC 5. Set target: `onsite_workshop.{their_username}`
