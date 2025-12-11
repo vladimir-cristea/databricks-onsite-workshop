@@ -1,7 +1,23 @@
+-- Databricks notebook source
+-- MAGIC %md
+-- MAGIC # Setup Script 2: Load Sample Data
+-- MAGIC
+-- MAGIC Loads sample data into tables from the volume.
+-- MAGIC
+-- MAGIC **Prerequisite:** Run COPY FILES command to populate volume with JSON files.
+
+-- COMMAND ----------
+
 USE CATALOG onsite_workshop;
 USE SCHEMA shared_data;
 
--- Partners table
+-- COMMAND ----------
+
+-- MAGIC %md
+-- MAGIC ## Partners Table
+
+-- COMMAND ----------
+
 DROP TABLE IF EXISTS partners;
 CREATE TABLE partners (
   partner_id INT,
@@ -12,14 +28,24 @@ CREATE TABLE partners (
   account_manager STRING
 );
 
+-- COMMAND ----------
+
 COPY INTO partners
 FROM '/Volumes/onsite_workshop/shared_data/data/partners.json'
 FILEFORMAT = JSON
 COPY_OPTIONS ('mergeSchema' = 'true');
 
+-- COMMAND ----------
+
 SELECT COUNT(*) as partner_count FROM partners;  -- Expected: 21
 
--- Products table
+-- COMMAND ----------
+
+-- MAGIC %md
+-- MAGIC ## Products Table
+
+-- COMMAND ----------
+
 DROP TABLE IF EXISTS products;
 CREATE TABLE products (
   product_id STRING,
@@ -30,14 +56,24 @@ CREATE TABLE products (
   launch_date DATE
 );
 
+-- COMMAND ----------
+
 COPY INTO products
 FROM '/Volumes/onsite_workshop/shared_data/data/products.json'
 FILEFORMAT = JSON
 COPY_OPTIONS ('mergeSchema' = 'true');
 
+-- COMMAND ----------
+
 SELECT COUNT(*) as product_count FROM products;  -- Expected: 6
 
--- Transactions table
+-- COMMAND ----------
+
+-- MAGIC %md
+-- MAGIC ## Transactions Table
+
+-- COMMAND ----------
+
 DROP TABLE IF EXISTS transactions;
 CREATE TABLE transactions (
   transaction_id INT,
@@ -50,14 +86,24 @@ CREATE TABLE transactions (
   currency STRING
 );
 
+-- COMMAND ----------
+
 COPY INTO transactions
 FROM '/Volumes/onsite_workshop/shared_data/data/transactions.json'
 FILEFORMAT = JSON
 COPY_OPTIONS ('mergeSchema' = 'true');
 
+-- COMMAND ----------
+
 SELECT COUNT(*) as transaction_count FROM transactions;  -- Expected: 50
 
--- Partner revenue summary (pre-aggregated)
+-- COMMAND ----------
+
+-- MAGIC %md
+-- MAGIC ## Partner Revenue Summary (Pre-aggregated)
+
+-- COMMAND ----------
+
 DROP TABLE IF EXISTS partner_revenue_summary;
 CREATE TABLE partner_revenue_summary (
   partner_id INT,
@@ -72,6 +118,8 @@ CREATE TABLE partner_revenue_summary (
   first_transaction_date DATE,
   last_transaction_date DATE
 );
+
+-- COMMAND ----------
 
 INSERT INTO partner_revenue_summary
 SELECT 
@@ -94,9 +142,17 @@ WHERE t.quantity > 0
   AND t.product_id IS NOT NULL
 GROUP BY p.partner_id, p.partner_name, p.region, p.tier;
 
+-- COMMAND ----------
+
 SELECT COUNT(*) as summary_count FROM partner_revenue_summary;  -- Expected: ~20
 
--- Product performance summary (pre-aggregated)
+-- COMMAND ----------
+
+-- MAGIC %md
+-- MAGIC ## Product Performance Summary (Pre-aggregated)
+
+-- COMMAND ----------
+
 DROP TABLE IF EXISTS product_performance_summary;
 CREATE TABLE product_performance_summary (
   product_id STRING,
@@ -110,6 +166,8 @@ CREATE TABLE product_performance_summary (
   total_profit DECIMAL(12,2),
   profit_margin_pct DECIMAL(5,2)
 );
+
+-- COMMAND ----------
 
 INSERT INTO product_performance_summary
 SELECT 
@@ -130,10 +188,20 @@ WHERE t.quantity > 0
   AND t.partner_id IS NOT NULL
 GROUP BY prod.product_id, prod.product_name, prod.category;
 
+-- COMMAND ----------
+
 SELECT COUNT(*) as product_summary_count FROM product_performance_summary;  -- Expected: ~5
 
--- Verify all tables loaded
+-- COMMAND ----------
+
+-- MAGIC %md
+-- MAGIC ## Verification
+
+-- COMMAND ----------
+
 SHOW TABLES IN onsite_workshop.shared_data;
+
+-- COMMAND ----------
 
 SELECT 
   (SELECT COUNT(*) FROM partners) as partners,

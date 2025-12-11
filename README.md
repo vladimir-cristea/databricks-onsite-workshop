@@ -20,19 +20,27 @@ Workshop setup for SQL analytics and Delta Live Tables pipeline exercises using 
 ### 1. Create User Group
 Go to **Settings → Identity and Access → Groups**, create group `onsite_workshop_participants`, add all participant emails.
 
-### 2. Clone Repository and Upload Data
-1. Go to **Repos** → **Add Repo** → Enter URL: `https://github.com/vladimir-cristea/databricks-onsite-workshop` → **Create Repo**
-2. After running script 01, upload data files to the volume:
-   - Navigate to **Catalog** → `onsite_workshop` → `shared_data` → `data` volume
-   - Upload the 3 JSON files from the cloned repo's `data/` folder
+### 2. Clone Repository
+Go to **Repos** → **Add Repo** → Enter URL: `https://github.com/vladimir-cristea/databricks-onsite-workshop` → **Create Repo**
 
-### 3. Run Setup Scripts
+### 3. Copy Data Files to Volume
+After creating the volume, copy data files from your cloned repo to the volume:
+
+```sql
+COPY FILES 'file:/Workspace/Repos/{your_username}/databricks-onsite-workshop/data/*.json' 
+TO '/Volumes/onsite_workshop/shared_data/data/';
+```
+
+Replace `{your_username}` with your actual username.
+
+### 4. Run Setup Scripts
 Open SQL Editor and run in order:
 1. `01_create_catalog_and_schema.sql`
-2. `02_load_data.sql`
-3. `03_grant_permissions.sql`
+2. Copy files command above
+3. `02_load_data.sql`
+4. `03_grant_permissions.sql`
 
-### 4. Verify
+### 5. Verify
 
 ```sql
 USE CATALOG onsite_workshop;

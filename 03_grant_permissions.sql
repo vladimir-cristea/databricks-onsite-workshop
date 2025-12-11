@@ -1,13 +1,24 @@
--- Grant permissions to workshop participants
--- PREREQUISITE: Create group "onsite_workshop_participants" in Settings → Identity and Access → Groups
+-- Databricks notebook source
+-- MAGIC %md
+-- MAGIC # Setup Script 3: Grant Permissions
+-- MAGIC
+-- MAGIC Grants permissions to workshop participants.
+-- MAGIC
+-- MAGIC **Prerequisite:** Create group `onsite_workshop_participants` in Settings → Identity and Access → Groups
+
+-- COMMAND ----------
 
 -- Catalog permissions
 GRANT USE CATALOG ON CATALOG onsite_workshop TO `onsite_workshop_participants`;
 GRANT CREATE SCHEMA ON CATALOG onsite_workshop TO `onsite_workshop_participants`;
 
+-- COMMAND ----------
+
 -- Schema permissions
 GRANT USE SCHEMA ON SCHEMA onsite_workshop.shared_data TO `onsite_workshop_participants`;
 GRANT SELECT ON SCHEMA onsite_workshop.shared_data TO `onsite_workshop_participants`;
+
+-- COMMAND ----------
 
 -- Table permissions
 GRANT SELECT ON TABLE onsite_workshop.shared_data.partners TO `onsite_workshop_participants`;
