@@ -18,23 +18,29 @@
 -- MAGIC # Get the current user's email/username
 -- MAGIC username = spark.sql("SELECT current_user() as user").collect()[0]['user']
 -- MAGIC 
--- MAGIC # Source: Your private Repos location
--- MAGIC source = f"/Workspace/Repos/{username}/databricks-onsite-workshop/sales_analytics_pipeline.sql"
+-- MAGIC # Source: Your private Users location
+-- MAGIC source_dir = f"/Workspace/Users/{username}/databricks-onsite-workshop/sdp_pipeline"
+-- MAGIC 
+-- MAGIC # Check if source directory exists
+-- MAGIC if not os.path.exists(source_dir):
+-- MAGIC     print(f"❌ Could not find sdp_pipeline directory at: {source_dir}")
+-- MAGIC     print(f"\nPlease ensure you've imported the repo to /Workspace/Users/{username}/")
+-- MAGIC     dbutils.notebook.exit("Source directory not found")
 -- MAGIC 
 -- MAGIC # Destination: Shared workspace
--- MAGIC dest = "/Workspace/Shared/workshop/sales_analytics_pipeline.sql"
--- MAGIC dest_dir = "/Workspace/Shared/workshop/"
+-- MAGIC dest_dir = "/Workspace/Shared/workshop/sdp_pipeline"
 -- MAGIC 
--- MAGIC # Create destination directory if it doesn't exist
--- MAGIC os.makedirs(dest_dir, exist_ok=True)
+-- MAGIC # Remove existing destination if it exists, then copy
+-- MAGIC if os.path.exists(dest_dir):
+-- MAGIC     shutil.rmtree(dest_dir)
 -- MAGIC 
--- MAGIC # Copy the file
--- MAGIC shutil.copy(source, dest)
+-- MAGIC # Copy the entire directory
+-- MAGIC shutil.copytree(source_dir, dest_dir)
 -- MAGIC 
--- MAGIC print(f"✅ Pipeline copied successfully!")
--- MAGIC print(f"Source: {source}")
--- MAGIC print(f"Destination: {dest}")
--- MAGIC print(f"\nParticipants can access it at: /Workspace/Shared/workshop/sales_analytics_pipeline.sql")
+-- MAGIC print(f"✅ Pipeline directory copied successfully!")
+-- MAGIC print(f"Source: {source_dir}")
+-- MAGIC print(f"Destination: {dest_dir}")
+-- MAGIC print(f"\nParticipants can access it at: /Workspace/Shared/workshop/sdp_pipeline/")
 
 -- COMMAND ----------
 
@@ -46,9 +52,9 @@
 -- MAGIC %python
 -- MAGIC import os
 -- MAGIC 
--- MAGIC # List files in Shared/workshop to verify
--- MAGIC files = os.listdir("/Workspace/Shared/workshop/")
--- MAGIC print("Files in /Workspace/Shared/workshop/:")
+-- MAGIC # List files in Shared/workshop/sdp_pipeline to verify
+-- MAGIC files = os.listdir("/Workspace/Shared/workshop/sdp_pipeline/")
+-- MAGIC print("Files in /Workspace/Shared/workshop/sdp_pipeline/:")
 -- MAGIC for f in files:
 -- MAGIC     print(f"  - {f}")
 
@@ -68,8 +74,8 @@
 -- MAGIC ## Next Steps for Participants
 -- MAGIC
 -- MAGIC Participants should:
--- MAGIC 1. Navigate to `/Workspace/Shared/workshop/sales_analytics_pipeline.sql`
--- MAGIC 2. Copy it to their own workspace
--- MAGIC 3. Edit to complete TODO sections
--- MAGIC 4. Create DLT pipeline pointing to their copy
+-- MAGIC 1. Navigate to `/Workspace/Shared/workshop/sdp_pipeline/`
+-- MAGIC 2. Copy the folder to their own workspace
+-- MAGIC 3. Edit `sales_analytics_pipeline.sql` to complete TODO sections
+-- MAGIC 4. Create Spark Declarative Pipeline pointing to their copy
 -- MAGIC 5. Set target: `onsite_workshop.{their_username}`

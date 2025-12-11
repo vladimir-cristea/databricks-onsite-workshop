@@ -1,6 +1,6 @@
 # Databricks Onsite Workshop
 
-Workshop setup for SQL analytics and Delta Live Tables pipeline exercises using partner/transaction data.
+Workshop setup for SQL analytics and Spark Declarative Pipelines (SDP) exercises using partner/transaction data.
 
 ## Contents
 
@@ -8,11 +8,11 @@ Workshop setup for SQL analytics and Delta Live Tables pipeline exercises using 
 - `01_create_catalog_and_schema.sql` - Creates catalog and schema
 - `02_load_data.sql` - Loads sample data (51 partners, 201 transactions, 6 products)
 - `03_grant_permissions.sql` - Grants participant access
-- `04_share_pipeline.sql` - Copies pipeline to shared workspace
+- `04_share_pipeline.sql` - Copies sdp_pipeline folder to shared workspace
 - `data/` - JSON source files
 
 **Participant Materials (Shared):**
-- `sales_analytics_pipeline.sql` - Afternoon hands-on exercise (8-node medallion pipeline)
+- `sdp_pipeline/sales_analytics_pipeline.sql` - Afternoon hands-on exercise (8-node medallion pipeline)
 
 ## Prerequisites
 
@@ -60,12 +60,12 @@ Expected: partners (51), products (6), transactions (201), summaries (~48-50 row
 **Morning**: Participants query the shared tables in `onsite_workshop.shared_data`
 
 **Afternoon**: Participants work with the pipeline:
-1. Navigate to `/Workspace/Shared/workshop/sales_analytics_pipeline.sql` 
-2. Copy it to their own workspace for editing
-3. Complete TODO sections in Gold layer
-4. Create DLT pipeline:
+1. Navigate to `/Workspace/Shared/workshop/sdp_pipeline/` 
+2. Copy the folder to their own workspace for editing
+3. Edit `sales_analytics_pipeline.sql` to complete TODO sections in Gold layer
+4. Create SDP pipeline:
    - Go to **Workflows** → **Delta Live Tables** → **Create Pipeline**
-   - Add their copy of the SQL file as source
+   - Add their `sales_analytics_pipeline.sql` file as source
    - Set target: `onsite_workshop.{their_username}`
 5. Run pipeline
 
