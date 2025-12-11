@@ -57,7 +57,8 @@ FROM STREAM read_files(
 
 CREATE OR REFRESH STREAMING TABLE silver_partners (
   CONSTRAINT valid_partner_id EXPECT (partner_id IS NOT NULL) ON VIOLATION DROP ROW,
-  CONSTRAINT valid_region EXPECT (region IN ('EMEA', 'AMER', 'APAC')) ON VIOLATION DROP ROW
+  CONSTRAINT valid_region EXPECT (region IN ('EMEA', 'AMER', 'APAC')) ON VIOLATION DROP ROW,
+  CONSTRAINT valid_tier EXPECT (tier IN ('Premium', 'Standard', 'Basic', 'TEST'))
 )
 COMMENT "Validated partners - TEST partners filtered"
 AS SELECT 
@@ -69,9 +70,9 @@ AS SELECT
   account_manager,
   DATEDIFF(CURRENT_DATE(), join_date) as days_since_joining,
   CASE 
-    WHEN tier = 'Gold' THEN 1
-    WHEN tier = 'Silver' THEN 2
-    WHEN tier = 'Bronze' THEN 3
+    WHEN tier = 'Premium' THEN 1
+    WHEN tier = 'Standard' THEN 2
+    WHEN tier = 'Basic' THEN 3
     ELSE 99
   END as tier_rank,
   ingestion_timestamp

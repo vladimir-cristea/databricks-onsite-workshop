@@ -1,22 +1,51 @@
-{"partner_id": 1, "partner_name": "Acme Solutions", "region": "EMEA", "tier": "Gold", "join_date": "2023-01-15", "account_manager": "Sarah Johnson"}
-{"partner_id": 2, "partner_name": "Global Tech Partners", "region": "AMER", "tier": "Gold", "join_date": "2023-02-20", "account_manager": "Mike Chen"}
-{"partner_id": 3, "partner_name": "Nordic Data Services", "region": "EMEA", "tier": "Silver", "join_date": "2023-03-10", "account_manager": "Sarah Johnson"}
-{"partner_id": 4, "partner_name": "Pacific Analytics Corp", "region": "APAC", "tier": "Gold", "join_date": "2023-01-25", "account_manager": "Lisa Wang"}
-{"partner_id": 5, "partner_name": "CloudFirst Consulting", "region": "AMER", "tier": "Silver", "join_date": "2023-04-12", "account_manager": "Mike Chen"}
-{"partner_id": 6, "partner_name": "DataDriven EMEA", "region": "EMEA", "tier": "Bronze", "join_date": "2023-05-18", "account_manager": "Sarah Johnson"}
-{"partner_id": 7, "partner_name": "AI Innovations Asia", "region": "APAC", "tier": "Silver", "join_date": "2023-02-28", "account_manager": "Lisa Wang"}
-{"partner_id": 8, "partner_name": "Enterprise Solutions Hub", "region": "AMER", "tier": "Gold", "join_date": "2023-03-05", "account_manager": "Mike Chen"}
-{"partner_id": 9, "partner_name": "SmartData Partners", "region": "EMEA", "tier": "Bronze", "join_date": "2023-06-22", "account_manager": "Sarah Johnson"}
-{"partner_id": 10, "partner_name": "TechVision APAC", "region": "APAC", "tier": "Bronze", "join_date": "2023-04-30", "account_manager": "Lisa Wang"}
-{"partner_id": 11, "partner_name": "Analytics Pro Group", "region": "AMER", "tier": "Silver", "join_date": "2023-05-15", "account_manager": "Mike Chen"}
-{"partner_id": 12, "partner_name": "DataLake Specialists", "region": "EMEA", "tier": "Gold", "join_date": "2023-01-08", "account_manager": "Sarah Johnson"}
-{"partner_id": 13, "partner_name": "Cloud Transform APAC", "region": "APAC", "tier": "Silver", "join_date": "2023-07-01", "account_manager": "Lisa Wang"}
-{"partner_id": 14, "partner_name": "NextGen Data Solutions", "region": "AMER", "tier": "Bronze", "join_date": "2023-06-10", "account_manager": "Mike Chen"}
-{"partner_id": 15, "partner_name": "Euro Analytics Partners", "region": "EMEA", "tier": "Silver", "join_date": "2023-02-14", "account_manager": "Sarah Johnson"}
-{"partner_id": 16, "partner_name": "Test Partner Alpha", "region": "AMER", "tier": "TEST", "join_date": "2023-08-01", "account_manager": "Test User"}
-{"partner_id": 17, "partner_name": "Test Partner Beta", "region": "EMEA", "tier": "TEST", "join_date": "2023-08-01", "account_manager": "Test User"}
-{"partner_id": 18, "partner_name": "Regional Data Experts", "region": "APAC", "tier": "Gold", "join_date": "2023-03-20", "account_manager": "Lisa Wang"}
-{"partner_id": 19, "partner_name": "Insight Analytics Group", "region": "AMER", "tier": "Gold", "join_date": "2023-04-25", "account_manager": "Mike Chen"}
-{"partner_id": 20, "partner_name": "Digital Transform EMEA", "region": "EMEA", "tier": "Bronze", "join_date": "2023-07-15", "account_manager": "Sarah Johnson"}
-{"partner_id": null, "partner_name": "Unknown Partner", "region": "EMEA", "tier": "Bronze", "join_date": "2023-01-01", "account_manager": null}
-
+{"partner_id": 1, "partner_name": "Acme Solutions", "region": "APAC", "tier": "Basic", "join_date": "2023-11-10", "account_manager": "Mike Chen"}
+{"partner_id": 2, "partner_name": "Global Tech Partners", "region": "EMEA", "tier": "Premium", "join_date": "2023-03-29", "account_manager": "Lisa Wang"}
+{"partner_id": 3, "partner_name": "Nordic Data Services", "region": "APAC", "tier": "Basic", "join_date": "2023-06-20", "account_manager": "Emma Davis"}
+{"partner_id": 4, "partner_name": "Pacific Analytics Corp", "region": "AMER", "tier": "Standard", "join_date": "2023-05-01", "account_manager": "David Brown"}
+{"partner_id": 5, "partner_name": "CloudFirst Consulting", "region": "AMER", "tier": "Standard", "join_date": "2023-02-05", "account_manager": "David Brown"}
+{"partner_id": 6, "partner_name": "DataDriven", "region": "APAC", "tier": "Premium", "join_date": "2023-04-26", "account_manager": "David Brown"}
+{"partner_id": 7, "partner_name": "AI Innovations", "region": "EMEA", "tier": "Standard", "join_date": "2023-11-01", "account_manager": "Lisa Wang"}
+{"partner_id": 8, "partner_name": "Enterprise Solutions Hub", "region": "EMEA", "tier": "Standard", "join_date": "2023-06-10", "account_manager": "Lisa Wang"}
+{"partner_id": 9, "partner_name": "SmartData Partners", "region": "APAC", "tier": "Standard", "join_date": "2023-02-13", "account_manager": "Sarah Johnson"}
+{"partner_id": 10, "partner_name": "TechVision", "region": "APAC", "tier": "Premium", "join_date": "2023-01-03", "account_manager": "Sarah Johnson"}
+{"partner_id": 11, "partner_name": "Analytics Pro Group", "region": "APAC", "tier": "Basic", "join_date": "2023-01-17", "account_manager": "David Brown"}
+{"partner_id": 12, "partner_name": "DataLake Specialists", "region": "APAC", "tier": "Standard", "join_date": "2023-03-20", "account_manager": "Lisa Wang"}
+{"partner_id": 13, "partner_name": "Cloud Transform", "region": "AMER", "tier": "Standard", "join_date": "2023-08-12", "account_manager": "Sarah Johnson"}
+{"partner_id": 14, "partner_name": "NextGen Data Solutions", "region": "APAC", "tier": "Basic", "join_date": "2023-02-10", "account_manager": "Sarah Johnson"}
+{"partner_id": 15, "partner_name": "Euro Analytics Partners", "region": "EMEA", "tier": "Standard", "join_date": "2023-04-03", "account_manager": "Lisa Wang"}
+{"partner_id": 16, "partner_name": "Regional Data Experts", "region": "AMER", "tier": "Premium", "join_date": "2023-10-04", "account_manager": "Sarah Johnson"}
+{"partner_id": 17, "partner_name": "Insight Analytics Group", "region": "EMEA", "tier": "Basic", "join_date": "2023-04-22", "account_manager": "David Brown"}
+{"partner_id": 18, "partner_name": "Digital Transform", "region": "EMEA", "tier": "Premium", "join_date": "2023-06-30", "account_manager": "David Brown"}
+{"partner_id": 19, "partner_name": "DataSync", "region": "APAC", "tier": "Premium", "join_date": "2023-06-29", "account_manager": "Emma Davis"}
+{"partner_id": 20, "partner_name": "CloudMaster", "region": "APAC", "tier": "Basic", "join_date": "2023-07-28", "account_manager": "Lisa Wang"}
+{"partner_id": 21, "partner_name": "Analytics Ace", "region": "EMEA", "tier": "Premium", "join_date": "2023-04-15", "account_manager": "Mike Chen"}
+{"partner_id": 22, "partner_name": "TechBridge", "region": "AMER", "tier": "Basic", "join_date": "2023-02-23", "account_manager": "Sarah Johnson"}
+{"partner_id": 23, "partner_name": "DataFlow", "region": "EMEA", "tier": "Basic", "join_date": "2023-06-17", "account_manager": "Emma Davis"}
+{"partner_id": 24, "partner_name": "InsightEdge", "region": "APAC", "tier": "Standard", "join_date": "2023-12-01", "account_manager": "Emma Davis"}
+{"partner_id": 25, "partner_name": "CloudVault", "region": "AMER", "tier": "Premium", "join_date": "2023-04-02", "account_manager": "David Brown"}
+{"partner_id": 26, "partner_name": "DataWise", "region": "APAC", "tier": "Premium", "join_date": "2023-04-23", "account_manager": "David Brown"}
+{"partner_id": 27, "partner_name": "TechSphere", "region": "EMEA", "tier": "Basic", "join_date": "2023-08-12", "account_manager": "Lisa Wang"}
+{"partner_id": 28, "partner_name": "AnalyticsHub", "region": "EMEA", "tier": "Basic", "join_date": "2023-05-22", "account_manager": "Emma Davis"}
+{"partner_id": 29, "partner_name": "CloudNova", "region": "EMEA", "tier": "Premium", "join_date": "2023-08-08", "account_manager": "Mike Chen"}
+{"partner_id": 30, "partner_name": "DataPeak", "region": "AMER", "tier": "Basic", "join_date": "2023-01-08", "account_manager": "David Brown"}
+{"partner_id": 31, "partner_name": "TechCrest", "region": "EMEA", "tier": "Basic", "join_date": "2023-05-15", "account_manager": "Mike Chen"}
+{"partner_id": 32, "partner_name": "InsightWave", "region": "AMER", "tier": "Premium", "join_date": "2023-04-12", "account_manager": "Lisa Wang"}
+{"partner_id": 33, "partner_name": "CloudForge", "region": "APAC", "tier": "Standard", "join_date": "2023-08-09", "account_manager": "Lisa Wang"}
+{"partner_id": 34, "partner_name": "DataPulse", "region": "APAC", "tier": "Standard", "join_date": "2023-01-29", "account_manager": "David Brown"}
+{"partner_id": 35, "partner_name": "TechNest", "region": "APAC", "tier": "Standard", "join_date": "2023-01-10", "account_manager": "Emma Davis"}
+{"partner_id": 36, "partner_name": "AnalyticsPro", "region": "APAC", "tier": "Standard", "join_date": "2023-12-31", "account_manager": "David Brown"}
+{"partner_id": 37, "partner_name": "CloudCore", "region": "APAC", "tier": "Basic", "join_date": "2023-02-15", "account_manager": "Mike Chen"}
+{"partner_id": 38, "partner_name": "DataStream", "region": "AMER", "tier": "Basic", "join_date": "2023-11-20", "account_manager": "Mike Chen"}
+{"partner_id": 39, "partner_name": "TechLink", "region": "AMER", "tier": "Standard", "join_date": "2023-06-09", "account_manager": "Mike Chen"}
+{"partner_id": 40, "partner_name": "InsightBase", "region": "APAC", "tier": "Standard", "join_date": "2023-04-10", "account_manager": "Lisa Wang"}
+{"partner_id": 41, "partner_name": "CloudShift", "region": "EMEA", "tier": "Basic", "join_date": "2023-08-06", "account_manager": "Sarah Johnson"}
+{"partner_id": 42, "partner_name": "DataFusion", "region": "AMER", "tier": "Premium", "join_date": "2023-06-23", "account_manager": "Emma Davis"}
+{"partner_id": 43, "partner_name": "TechAlign", "region": "AMER", "tier": "Basic", "join_date": "2023-01-29", "account_manager": "David Brown"}
+{"partner_id": 44, "partner_name": "AnalyticsMax", "region": "APAC", "tier": "Standard", "join_date": "2023-09-10", "account_manager": "Lisa Wang"}
+{"partner_id": 45, "partner_name": "CloudPath", "region": "AMER", "tier": "Basic", "join_date": "2023-12-17", "account_manager": "Emma Davis"}
+{"partner_id": 46, "partner_name": "DataQuest", "region": "APAC", "tier": "Standard", "join_date": "2023-04-11", "account_manager": "Mike Chen"}
+{"partner_id": 47, "partner_name": "TechBeam", "region": "EMEA", "tier": "Premium", "join_date": "2023-09-19", "account_manager": "Emma Davis"}
+{"partner_id": 48, "partner_name": "InsightFlow", "region": "EMEA", "tier": "Premium", "join_date": "2023-09-15", "account_manager": "Mike Chen"}
+{"partner_id": 49, "partner_name": "Test Partner Alpha", "region": "AMER", "tier": "TEST", "join_date": "2023-08-01", "account_manager": "Test User"}
+{"partner_id": 50, "partner_name": "Test Partner Beta", "region": "EMEA", "tier": "TEST", "join_date": "2023-08-01", "account_manager": "Test User"}
+{"partner_id": null, "partner_name": "Unknown Partner", "region": "EMEA", "tier": "Basic", "join_date": "2023-01-01", "account_manager": null}

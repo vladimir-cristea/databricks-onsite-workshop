@@ -59,7 +59,7 @@ UNION ALL SELECT 'partner_revenue_summary', COUNT(*) FROM partner_revenue_summar
 UNION ALL SELECT 'product_performance_summary', COUNT(*) FROM product_performance_summary;
 ```
 
-Expected: partners (21), products (6), transactions (50), summaries (~20-25 rows)
+Expected: partners (51), products (6), transactions (201), summaries (~48-50 rows)
 
 ## Workshop Day
 

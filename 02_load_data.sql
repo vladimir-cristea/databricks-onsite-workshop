@@ -28,7 +28,7 @@ FROM read_files(
 
 -- COMMAND ----------
 
-SELECT COUNT(*) as partner_count FROM partners;  -- Expected: 21
+SELECT COUNT(*) as partner_count FROM partners;  -- Expected: 51
 
 -- COMMAND ----------
 
@@ -66,7 +66,7 @@ FROM read_files(
 
 -- COMMAND ----------
 
-SELECT COUNT(*) as transaction_count FROM transactions;  -- Expected: 50
+SELECT COUNT(*) as transaction_count FROM transactions;  -- Expected: 201
 
 -- COMMAND ----------
 
@@ -115,7 +115,7 @@ GROUP BY p.partner_id, p.partner_name, p.region, p.tier;
 
 -- COMMAND ----------
 
-SELECT COUNT(*) as summary_count FROM partner_revenue_summary;  -- Expected: ~20
+SELECT COUNT(*) as summary_count FROM partner_revenue_summary;  -- Expected: ~48
 
 -- COMMAND ----------
 
@@ -161,7 +161,7 @@ GROUP BY prod.product_id, prod.product_name, prod.category;
 
 -- COMMAND ----------
 
-SELECT COUNT(*) as product_summary_count FROM product_performance_summary;  -- Expected: ~5
+SELECT COUNT(*) as product_summary_count FROM product_performance_summary;  -- Expected: 5
 
 -- COMMAND ----------
 
