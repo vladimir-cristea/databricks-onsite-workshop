@@ -12,31 +12,29 @@
 -- COMMAND ----------
 
 -- MAGIC %python
+-- MAGIC import shutil
+-- MAGIC import os
+-- MAGIC 
 -- MAGIC # Get the current user's email/username
 -- MAGIC username = spark.sql("SELECT current_user() as user").collect()[0]['user']
 -- MAGIC 
 -- MAGIC # Source: Your private Repos location
--- MAGIC source = f"file:/Workspace/Repos/{username}/databricks-onsite-workshop/sales_analytics_pipeline.sql"
+-- MAGIC source = f"/Workspace/Repos/{username}/databricks-onsite-workshop/sales_analytics_pipeline.sql"
 -- MAGIC 
 -- MAGIC # Destination: Shared workspace
--- MAGIC dest = "file:/Workspace/Shared/workshop/sales_analytics_pipeline.sql"
+-- MAGIC dest = "/Workspace/Shared/workshop/sales_analytics_pipeline.sql"
+-- MAGIC dest_dir = "/Workspace/Shared/workshop/"
 -- MAGIC 
 -- MAGIC # Create destination directory if it doesn't exist
--- MAGIC try:
--- MAGIC     dbutils.fs.mkdirs("file:/Workspace/Shared/workshop/")
--- MAGIC except:
--- MAGIC     pass  # Directory might already exist
+-- MAGIC os.makedirs(dest_dir, exist_ok=True)
 -- MAGIC 
 -- MAGIC # Copy the file
--- MAGIC result = dbutils.fs.cp(source, dest, recurse=False)
+-- MAGIC shutil.copy(source, dest)
 -- MAGIC 
--- MAGIC if result:
--- MAGIC     print(f"✅ Pipeline copied successfully!")
--- MAGIC     print(f"Source: {source}")
--- MAGIC     print(f"Destination: {dest}")
--- MAGIC     print(f"\nParticipants can access it at: /Workspace/Shared/workshop/sales_analytics_pipeline.sql")
--- MAGIC else:
--- MAGIC     print("❌ Copy failed")
+-- MAGIC print(f"✅ Pipeline copied successfully!")
+-- MAGIC print(f"Source: {source}")
+-- MAGIC print(f"Destination: {dest}")
+-- MAGIC print(f"\nParticipants can access it at: /Workspace/Shared/workshop/sales_analytics_pipeline.sql")
 
 -- COMMAND ----------
 
@@ -46,9 +44,13 @@
 -- COMMAND ----------
 
 -- MAGIC %python
+-- MAGIC import os
+-- MAGIC 
 -- MAGIC # List files in Shared/workshop to verify
--- MAGIC files = dbutils.fs.ls("file:/Workspace/Shared/workshop/")
--- MAGIC display(files)
+-- MAGIC files = os.listdir("/Workspace/Shared/workshop/")
+-- MAGIC print("Files in /Workspace/Shared/workshop/:")
+-- MAGIC for f in files:
+-- MAGIC     print(f"  - {f}")
 
 -- COMMAND ----------
 
