@@ -14,7 +14,7 @@ AS SELECT
   account_manager,
   current_timestamp() as ingestion_timestamp
 FROM STREAM read_files(
-  '/Volumes/onsite_workshop/shared_data/data/partners/',
+  '/Volumes/onsite_workshop/shared_data/data/data/partners/',
   format => 'json',
   schemaHints => 'partner_id INT, join_date DATE'
 );
@@ -32,7 +32,7 @@ AS SELECT
   currency,
   current_timestamp() as ingestion_timestamp
 FROM STREAM read_files(
-  '/Volumes/onsite_workshop/shared_data/data/transactions/',
+  '/Volumes/onsite_workshop/shared_data/data/data/transactions/',
   format => 'json',
   schemaHints => 'transaction_id INT, partner_id INT, quantity INT, transaction_date DATE, unit_price DECIMAL(10,2), discount_pct DECIMAL(5,2)'
 );
@@ -48,7 +48,7 @@ AS SELECT
   launch_date,
   current_timestamp() as ingestion_timestamp
 FROM STREAM read_files(
-  '/Volumes/onsite_workshop/shared_data/data/products/',
+  '/Volumes/onsite_workshop/shared_data/data/data/products/',
   format => 'json',
   schemaHints => 'list_price DECIMAL(10,2), cost DECIMAL(10,2), launch_date DATE'
 );
