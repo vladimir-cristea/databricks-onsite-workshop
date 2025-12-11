@@ -1,5 +1,5 @@
 -- Sales Analytics Pipeline - 8-Node Medallion Architecture
--- Setup: Configure pipeline target as 'onsite_workshop.{username}' in SDP UI
+-- Setup: Configure pipeline target as 'onsite_workshop.{username}' in DLT UI
 
 -- Bronze Layer: Raw Ingestion
 
