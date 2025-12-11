@@ -1,25 +1,13 @@
--- Databricks notebook source
--- MAGIC %md
--- MAGIC # Sales Analytics Pipeline - 8-Node Medallion Architecture
--- MAGIC
--- MAGIC **Setup:** Enter your username in the widget above, then run the pipeline
-
--- COMMAND ----------
+-- Sales Analytics Pipeline - 8-Node Medallion Architecture
+-- Setup: Configure pipeline with parameter 'username' and target schema 'onsite_workshop.{username}'
 
 -- Create username widget
 CREATE WIDGET TEXT username DEFAULT 'your_username';
 
--- COMMAND ----------
-
 -- Create personal schema for this participant
 CREATE SCHEMA IF NOT EXISTS IDENTIFIER('onsite_workshop.' || :username);
 
--- COMMAND ----------
-
--- MAGIC %md
--- MAGIC ## Bronze Layer: Raw Ingestion
-
--- COMMAND ----------
+-- Bronze Layer: Raw Ingestion
 
 CREATE OR REFRESH STREAMING TABLE bronze_partners
 COMMENT "Raw partner master data"
@@ -36,8 +24,6 @@ FROM STREAM read_files(
   format => 'json',
   schemaHints => 'partner_id INT, join_date DATE'
 );
-
--- COMMAND ----------
 
 CREATE OR REFRESH STREAMING TABLE bronze_transactions
 COMMENT "Raw transaction data"
@@ -57,8 +43,6 @@ FROM STREAM read_files(
   schemaHints => 'transaction_id INT, partner_id INT, quantity INT, transaction_date DATE, unit_price DECIMAL(10,2), discount_pct DECIMAL(5,2)'
 );
 
--- COMMAND ----------
-
 CREATE OR REFRESH STREAMING TABLE bronze_products
 COMMENT "Raw product catalog"
 AS SELECT 
@@ -75,12 +59,7 @@ FROM STREAM read_files(
   schemaHints => 'list_price DECIMAL(10,2), cost DECIMAL(10,2), launch_date DATE'
 );
 
--- COMMAND ----------
-
--- MAGIC %md
--- MAGIC ## Silver Layer: Cleaned & Validated
-
--- COMMAND ----------
+-- Silver Layer: Cleaned & Validated
 
 CREATE OR REFRESH STREAMING TABLE silver_partners (
   CONSTRAINT valid_partner_id EXPECT (partner_id IS NOT NULL) ON VIOLATION DROP ROW,
@@ -105,8 +84,6 @@ AS SELECT
 FROM STREAM(bronze_partners)
 WHERE tier != 'TEST';
 
--- COMMAND ----------
-
 CREATE OR REFRESH STREAMING TABLE silver_products (
   CONSTRAINT valid_product_id EXPECT (product_id IS NOT NULL) ON VIOLATION DROP ROW,
   CONSTRAINT valid_list_price EXPECT (list_price > 0) ON VIOLATION DROP ROW
@@ -123,8 +100,6 @@ AS SELECT
   DATEDIFF(CURRENT_DATE(), launch_date) as days_since_launch,
   ingestion_timestamp
 FROM STREAM(bronze_products);
-
--- COMMAND ----------
 
 CREATE OR REFRESH STREAMING TABLE silver_transactions (
   CONSTRAINT valid_quantity EXPECT (quantity > 0) ON VIOLATION DROP ROW,
@@ -154,12 +129,7 @@ FROM STREAM(bronze_transactions) t
 INNER JOIN silver_partners p ON t.partner_id = p.partner_id
 INNER JOIN silver_products prod ON t.product_id = prod.product_id;
 
--- COMMAND ----------
-
--- MAGIC %md
--- MAGIC ## Gold Layer: Business Metrics (YOUR TODO!)
-
--- COMMAND ----------
+-- Gold Layer: Business Metrics (TODO sections for participants)
 
 CREATE OR REFRESH MATERIALIZED VIEW gold_partner_revenue_summary
 COMMENT "Monthly partner revenue and profit"
@@ -183,8 +153,6 @@ GROUP BY
   region,
   tier;
 
--- COMMAND ----------
-
 CREATE OR REFRESH MATERIALIZED VIEW gold_product_performance
 COMMENT "Monthly product performance metrics"
 AS SELECT 
@@ -205,50 +173,3 @@ GROUP BY
   category,
   product_id,
   product_name;
-
--- COMMAND ----------
-
--- MAGIC %md
--- MAGIC ## Verification
-
--- COMMAND ----------
-
--- Row counts at each layer
-SELECT 'Bronze - Partners' as table_name, COUNT(*) as row_count FROM bronze_partners
-UNION ALL SELECT 'Bronze - Transactions', COUNT(*) FROM bronze_transactions
-UNION ALL SELECT 'Bronze - Products', COUNT(*) FROM bronze_products
-UNION ALL SELECT 'Silver - Partners', COUNT(*) FROM silver_partners
-UNION ALL SELECT 'Silver - Transactions', COUNT(*) FROM silver_transactions
-UNION ALL SELECT 'Silver - Products', COUNT(*) FROM silver_products
-UNION ALL SELECT 'Gold - Partner Revenue', COUNT(*) FROM gold_partner_revenue_summary
-UNION ALL SELECT 'Gold - Product Performance', COUNT(*) FROM gold_product_performance
-ORDER BY table_name;
-
--- COMMAND ----------
-
--- Top partners by revenue
-SELECT 
-  partner_name,
-  region,
-  tier,
-  SUM(total_revenue) as lifetime_revenue,
-  SUM(total_profit) as lifetime_profit,
-  SUM(num_transactions) as total_deals
-FROM gold_partner_revenue_summary
-GROUP BY partner_name, region, tier
-ORDER BY lifetime_revenue DESC
-LIMIT 10;
-
--- COMMAND ----------
-
--- Top products by revenue
-SELECT 
-  product_name,
-  category,
-  SUM(total_revenue) as total_revenue,
-  SUM(total_units_sold) as units_sold,
-  AVG(profit_margin_pct) as avg_margin
-FROM gold_product_performance
-GROUP BY product_name, category
-ORDER BY total_revenue DESC
-LIMIT 10;
