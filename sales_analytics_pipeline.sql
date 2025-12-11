@@ -2,19 +2,17 @@
 -- MAGIC %md
 -- MAGIC # Sales Analytics Pipeline - 8-Node Medallion Architecture
 -- MAGIC
--- MAGIC **Pipeline Setup:**
--- MAGIC 1. Create a new DLT pipeline
--- MAGIC 2. Add this notebook as source
--- MAGIC 3. Set pipeline parameter: `username` = your_username (e.g., john_doe)
--- MAGIC 4. Set target: `onsite_workshop.${username}`
--- MAGIC 5. Run the pipeline
--- MAGIC
--- MAGIC All tables will be created in your personal schema: `onsite_workshop.{your_username}`
+-- MAGIC **Setup:** Enter your username in the widget above, then run the pipeline
+
+-- COMMAND ----------
+
+-- Create username widget
+CREATE WIDGET TEXT username DEFAULT 'your_username';
 
 -- COMMAND ----------
 
 -- Create personal schema for this participant
-CREATE SCHEMA IF NOT EXISTS onsite_workshop.${username};
+CREATE SCHEMA IF NOT EXISTS IDENTIFIER('onsite_workshop.' || :username);
 
 -- COMMAND ----------
 
