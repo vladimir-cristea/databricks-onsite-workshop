@@ -32,7 +32,7 @@ AS SELECT
   account_manager,
   current_timestamp() as ingestion_timestamp
 FROM STREAM read_files(
-  '/Workspace/Shared/databricks_onsite_workshop/data/partners.json',
+  '/Volumes/onsite_workshop/shared_data/data/partners.json',
   format => 'json',
   schemaHints => 'partner_id INT, join_date DATE'
 );
@@ -52,7 +52,7 @@ AS SELECT
   currency,
   current_timestamp() as ingestion_timestamp
 FROM STREAM read_files(
-  '/Workspace/Shared/databricks_onsite_workshop/data/transactions.json',
+  '/Volumes/onsite_workshop/shared_data/data/transactions.json',
   format => 'json',
   schemaHints => 'transaction_id INT, partner_id INT, quantity INT, transaction_date DATE, unit_price DECIMAL(10,2), discount_pct DECIMAL(5,2)'
 );
@@ -70,7 +70,7 @@ AS SELECT
   launch_date,
   current_timestamp() as ingestion_timestamp
 FROM STREAM read_files(
-  '/Workspace/Shared/databricks_onsite_workshop/data/products.json',
+  '/Volumes/onsite_workshop/shared_data/data/products.json',
   format => 'json',
   schemaHints => 'list_price DECIMAL(10,2), cost DECIMAL(10,2), launch_date DATE'
 );

@@ -13,7 +13,7 @@ CREATE TABLE partners (
 );
 
 COPY INTO partners
-FROM '/Workspace/Shared/databricks_onsite_workshop/data/partners.json'
+FROM '/Volumes/onsite_workshop/shared_data/data/partners.json'
 FILEFORMAT = JSON
 COPY_OPTIONS ('mergeSchema' = 'true');
 
@@ -31,7 +31,7 @@ CREATE TABLE products (
 );
 
 COPY INTO products
-FROM '/Workspace/Shared/databricks_onsite_workshop/data/products.json'
+FROM '/Volumes/onsite_workshop/shared_data/data/products.json'
 FILEFORMAT = JSON
 COPY_OPTIONS ('mergeSchema' = 'true');
 
@@ -51,7 +51,7 @@ CREATE TABLE transactions (
 );
 
 COPY INTO transactions
-FROM '/Workspace/Shared/databricks_onsite_workshop/data/transactions.json'
+FROM '/Volumes/onsite_workshop/shared_data/data/transactions.json'
 FILEFORMAT = JSON
 COPY_OPTIONS ('mergeSchema' = 'true');
 
