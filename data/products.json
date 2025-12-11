@@ -1,0 +1,7 @@
+{"product_id": "PROD-001", "product_name": "Analytics Platform Standard", "category": "Analytics", "list_price": 3000.00, "cost": 1200.00, "launch_date": "2022-01-15"}
+{"product_id": "PROD-002", "product_name": "AI Studio Enterprise", "category": "AI", "list_price": 11000.00, "cost": 5500.00, "launch_date": "2022-03-20"}
+{"product_id": "PROD-003", "product_name": "Data Engineering Suite", "category": "Data Engineering", "list_price": 3500.00, "cost": 1400.00, "launch_date": "2022-02-10"}
+{"product_id": "PROD-004", "product_name": "AI Workbench Pro", "category": "AI", "list_price": 3000.00, "cost": 1300.00, "launch_date": "2023-01-05"}
+{"product_id": "PROD-005", "product_name": "Pipeline Automation Tools", "category": "Data Engineering", "list_price": 2500.00, "cost": 1000.00, "launch_date": "2023-04-12"}
+{"product_id": null, "product_name": "Unknown Product", "category": "Unknown", "list_price": 0.00, "cost": 0.00, "launch_date": null}
+

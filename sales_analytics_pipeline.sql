@@ -1,0 +1,256 @@
+-- Databricks notebook source
+-- MAGIC %md
+-- MAGIC # Sales Analytics Pipeline - 8-Node Medallion Architecture
+-- MAGIC
+-- MAGIC **Pipeline Setup:**
+-- MAGIC 1. Create a new DLT pipeline
+-- MAGIC 2. Add this notebook as source
+-- MAGIC 3. Set pipeline parameter: `username` = your_username (e.g., john_doe)
+-- MAGIC 4. Set target: `onsite_workshop.${username}`
+-- MAGIC 5. Run the pipeline
+-- MAGIC
+-- MAGIC All tables will be created in your personal schema: `onsite_workshop.{your_username}`
+
+-- COMMAND ----------
+
+-- Create personal schema for this participant
+CREATE SCHEMA IF NOT EXISTS onsite_workshop.${username};
+
+-- COMMAND ----------
+
+-- MAGIC %md
+-- MAGIC ## Bronze Layer: Raw Ingestion
+
+-- COMMAND ----------
+
+CREATE OR REFRESH STREAMING TABLE bronze_partners
+COMMENT "Raw partner master data"
+AS SELECT 
+  partner_id,
+  partner_name,
+  region,
+  tier,
+  join_date,
+  account_manager,
+  current_timestamp() as ingestion_timestamp
+FROM STREAM read_files(
+  '/Workspace/Shared/databricks_onsite_workshop/data/partners.json',
+  format => 'json',
+  schemaHints => 'partner_id INT, join_date DATE'
+);
+
+-- COMMAND ----------
+
+CREATE OR REFRESH STREAMING TABLE bronze_transactions
+COMMENT "Raw transaction data"
+AS SELECT 
+  transaction_id,
+  partner_id,
+  product_id,
+  transaction_date,
+  quantity,
+  unit_price,
+  discount_pct,
+  currency,
+  current_timestamp() as ingestion_timestamp
+FROM STREAM read_files(
+  '/Workspace/Shared/databricks_onsite_workshop/data/transactions.json',
+  format => 'json',
+  schemaHints => 'transaction_id INT, partner_id INT, quantity INT, transaction_date DATE, unit_price DECIMAL(10,2), discount_pct DECIMAL(5,2)'
+);
+
+-- COMMAND ----------
+
+CREATE OR REFRESH STREAMING TABLE bronze_products
+COMMENT "Raw product catalog"
+AS SELECT 
+  product_id,
+  product_name,
+  category,
+  list_price,
+  cost,
+  launch_date,
+  current_timestamp() as ingestion_timestamp
+FROM STREAM read_files(
+  '/Workspace/Shared/databricks_onsite_workshop/data/products.json',
+  format => 'json',
+  schemaHints => 'list_price DECIMAL(10,2), cost DECIMAL(10,2), launch_date DATE'
+);
+
+-- COMMAND ----------
+
+-- MAGIC %md
+-- MAGIC ## Silver Layer: Cleaned & Validated
+
+-- COMMAND ----------
+
+CREATE OR REFRESH STREAMING TABLE silver_partners (
+  CONSTRAINT valid_partner_id EXPECT (partner_id IS NOT NULL) ON VIOLATION DROP ROW,
+  CONSTRAINT valid_region EXPECT (region IN ('EMEA', 'AMER', 'APAC')) ON VIOLATION DROP ROW
+)
+COMMENT "Validated partners - TEST partners filtered"
+AS SELECT 
+  partner_id,
+  partner_name,
+  region,
+  tier,
+  join_date,
+  account_manager,
+  DATEDIFF(CURRENT_DATE(), join_date) as days_since_joining,
+  CASE 
+    WHEN tier = 'Gold' THEN 1
+    WHEN tier = 'Silver' THEN 2
+    WHEN tier = 'Bronze' THEN 3
+    ELSE 99
+  END as tier_rank,
+  ingestion_timestamp
+FROM STREAM(bronze_partners)
+WHERE tier != 'TEST';
+
+-- COMMAND ----------
+
+CREATE OR REFRESH STREAMING TABLE silver_products (
+  CONSTRAINT valid_product_id EXPECT (product_id IS NOT NULL) ON VIOLATION DROP ROW,
+  CONSTRAINT valid_list_price EXPECT (list_price > 0) ON VIOLATION DROP ROW
+)
+COMMENT "Validated products with margins"
+AS SELECT 
+  product_id,
+  product_name,
+  category,
+  list_price,
+  cost,
+  launch_date,
+  ROUND((list_price - cost) / list_price * 100, 2) as margin_pct,
+  DATEDIFF(CURRENT_DATE(), launch_date) as days_since_launch,
+  ingestion_timestamp
+FROM STREAM(bronze_products);
+
+-- COMMAND ----------
+
+CREATE OR REFRESH STREAMING TABLE silver_transactions (
+  CONSTRAINT valid_quantity EXPECT (quantity > 0) ON VIOLATION DROP ROW,
+  CONSTRAINT valid_partner_ref EXPECT (partner_id IS NOT NULL) ON VIOLATION DROP ROW,
+  CONSTRAINT valid_product_ref EXPECT (product_id IS NOT NULL) ON VIOLATION DROP ROW
+)
+COMMENT "Validated enriched transactions with revenue and profit"
+AS SELECT 
+  t.transaction_id,
+  t.partner_id,
+  p.partner_name,
+  p.region,
+  p.tier,
+  t.product_id,
+  prod.product_name,
+  prod.category,
+  t.transaction_date,
+  t.quantity,
+  t.unit_price,
+  t.discount_pct,
+  t.currency,
+  ROUND(t.quantity * t.unit_price * (1 - t.discount_pct / 100), 2) as revenue,
+  ROUND(t.quantity * prod.cost, 2) as total_cost,
+  ROUND(t.quantity * t.unit_price * (1 - t.discount_pct / 100) - t.quantity * prod.cost, 2) as profit,
+  t.ingestion_timestamp
+FROM STREAM(bronze_transactions) t
+INNER JOIN silver_partners p ON t.partner_id = p.partner_id
+INNER JOIN silver_products prod ON t.product_id = prod.product_id;
+
+-- COMMAND ----------
+
+-- MAGIC %md
+-- MAGIC ## Gold Layer: Business Metrics (YOUR TODO!)
+
+-- COMMAND ----------
+
+CREATE OR REFRESH MATERIALIZED VIEW gold_partner_revenue_summary
+COMMENT "Monthly partner revenue and profit"
+AS SELECT 
+  DATE_TRUNC('MONTH', transaction_date) as month,
+  partner_id,
+  partner_name,
+  region,
+  tier,
+  0 as total_revenue,  -- TODO: Use SUM(revenue)
+  0 as total_profit,   -- TODO: Use SUM(profit)
+  COUNT(transaction_id) as num_transactions,
+  SUM(quantity) as total_units_sold,
+  AVG(revenue) as avg_transaction_value,
+  MAX(revenue) as largest_deal
+FROM silver_transactions
+GROUP BY 
+  DATE_TRUNC('MONTH', transaction_date),
+  partner_id,
+  partner_name,
+  region,
+  tier;
+
+-- COMMAND ----------
+
+CREATE OR REFRESH MATERIALIZED VIEW gold_product_performance
+COMMENT "Monthly product performance metrics"
+AS SELECT 
+  DATE_TRUNC('MONTH', transaction_date) as month,
+  category,
+  product_id,
+  product_name,
+  0 as total_revenue,      -- TODO: Use SUM(revenue)
+  0 as unique_customers,   -- TODO: Use COUNT(DISTINCT partner_id)
+  SUM(quantity) as total_units_sold,
+  COUNT(transaction_id) as num_transactions,
+  AVG(discount_pct) as avg_discount_pct,
+  SUM(profit) as total_profit,
+  ROUND(SUM(profit) / NULLIF(SUM(revenue), 0) * 100, 2) as profit_margin_pct
+FROM silver_transactions
+GROUP BY 
+  DATE_TRUNC('MONTH', transaction_date),
+  category,
+  product_id,
+  product_name;
+
+-- COMMAND ----------
+
+-- MAGIC %md
+-- MAGIC ## Verification
+
+-- COMMAND ----------
+
+-- Row counts at each layer
+SELECT 'Bronze - Partners' as table_name, COUNT(*) as row_count FROM bronze_partners
+UNION ALL SELECT 'Bronze - Transactions', COUNT(*) FROM bronze_transactions
+UNION ALL SELECT 'Bronze - Products', COUNT(*) FROM bronze_products
+UNION ALL SELECT 'Silver - Partners', COUNT(*) FROM silver_partners
+UNION ALL SELECT 'Silver - Transactions', COUNT(*) FROM silver_transactions
+UNION ALL SELECT 'Silver - Products', COUNT(*) FROM silver_products
+UNION ALL SELECT 'Gold - Partner Revenue', COUNT(*) FROM gold_partner_revenue_summary
+UNION ALL SELECT 'Gold - Product Performance', COUNT(*) FROM gold_product_performance
+ORDER BY table_name;
+
+-- COMMAND ----------
+
+-- Top partners by revenue
+SELECT 
+  partner_name,
+  region,
+  tier,
+  SUM(total_revenue) as lifetime_revenue,
+  SUM(total_profit) as lifetime_profit,
+  SUM(num_transactions) as total_deals
+FROM gold_partner_revenue_summary
+GROUP BY partner_name, region, tier
+ORDER BY lifetime_revenue DESC
+LIMIT 10;
+
+-- COMMAND ----------
+
+-- Top products by revenue
+SELECT 
+  product_name,
+  category,
+  SUM(total_revenue) as total_revenue,
+  SUM(total_units_sold) as units_sold,
+  AVG(profit_margin_pct) as avg_margin
+FROM gold_product_performance
+GROUP BY product_name, category
+ORDER BY total_revenue DESC
+LIMIT 10;
