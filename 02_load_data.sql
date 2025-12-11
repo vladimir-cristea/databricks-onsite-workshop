@@ -18,22 +18,13 @@ USE SCHEMA shared_data;
 
 -- COMMAND ----------
 
-DROP TABLE IF EXISTS partners;
-CREATE TABLE partners (
-  partner_id INT,
-  partner_name STRING,
-  region STRING,
-  tier STRING,
-  join_date DATE,
-  account_manager STRING
+CREATE OR REPLACE TABLE partners AS
+SELECT *
+FROM read_files(
+  '/Volumes/onsite_workshop/shared_data/data/partners.json',
+  format => 'json',
+  schemaHints => 'partner_id INT, join_date DATE'
 );
-
--- COMMAND ----------
-
-COPY INTO partners
-FROM '/Volumes/onsite_workshop/shared_data/data/partners.json'
-FILEFORMAT = JSON
-COPY_OPTIONS ('mergeSchema' = 'true');
 
 -- COMMAND ----------
 
@@ -46,22 +37,13 @@ SELECT COUNT(*) as partner_count FROM partners;  -- Expected: 21
 
 -- COMMAND ----------
 
-DROP TABLE IF EXISTS products;
-CREATE TABLE products (
-  product_id STRING,
-  product_name STRING,
-  category STRING,
-  list_price DECIMAL(10,2),
-  cost DECIMAL(10,2),
-  launch_date DATE
+CREATE OR REPLACE TABLE products AS
+SELECT *
+FROM read_files(
+  '/Volumes/onsite_workshop/shared_data/data/products.json',
+  format => 'json',
+  schemaHints => 'list_price DECIMAL(10,2), cost DECIMAL(10,2), launch_date DATE'
 );
-
--- COMMAND ----------
-
-COPY INTO products
-FROM '/Volumes/onsite_workshop/shared_data/data/products.json'
-FILEFORMAT = JSON
-COPY_OPTIONS ('mergeSchema' = 'true');
 
 -- COMMAND ----------
 
@@ -74,24 +56,13 @@ SELECT COUNT(*) as product_count FROM products;  -- Expected: 6
 
 -- COMMAND ----------
 
-DROP TABLE IF EXISTS transactions;
-CREATE TABLE transactions (
-  transaction_id INT,
-  partner_id INT,
-  product_id STRING,
-  transaction_date DATE,
-  quantity INT,
-  unit_price DECIMAL(10,2),
-  discount_pct DECIMAL(5,2),
-  currency STRING
+CREATE OR REPLACE TABLE transactions AS
+SELECT *
+FROM read_files(
+  '/Volumes/onsite_workshop/shared_data/data/transactions.json',
+  format => 'json',
+  schemaHints => 'transaction_id INT, partner_id INT, quantity INT, transaction_date DATE, unit_price DECIMAL(10,2), discount_pct DECIMAL(5,2)'
 );
-
--- COMMAND ----------
-
-COPY INTO transactions
-FROM '/Volumes/onsite_workshop/shared_data/data/transactions.json'
-FILEFORMAT = JSON
-COPY_OPTIONS ('mergeSchema' = 'true');
 
 -- COMMAND ----------
 
