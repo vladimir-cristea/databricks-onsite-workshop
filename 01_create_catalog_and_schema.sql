@@ -8,8 +8,7 @@
 
 -- Create catalog
 CREATE CATALOG IF NOT EXISTS onsite_workshop
-MANAGED LOCATION '<S3_BUCKET>'  -- TO DO: Change this to your S3 location
-;
+COMMENT 'Workshop catalog for onsite training';
 USE CATALOG onsite_workshop;
 
 -- COMMAND ----------
